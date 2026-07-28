@@ -1,0 +1,87 @@
+apiVersion: scripts.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: text_similarity_checker
+  owner: 欣翔
+  description: 检测一批文本中是否存在高度相似内容
+  examples:
+    - name: 基础相似度检测
+      parameters:
+        text_field: 待检测文本
+        confidence: 0.8
+        projectids: []
+        route: 1
+      returns:
+        result: false
+        sim_text: 已存在的相似文本
+        value: 0.92
+
+parameters:
+  - key: text_field
+    name: 目标文本
+    description: 需要进行相似度检测的文本
+    dataType: string
+    sourceType: feishu
+    required: true
+
+  - key: confidence
+    name: 相似度阈值
+    description: 相似度高于该值时判定为重复
+    dataType: float
+    sourceType: manual
+    required: true
+    default: 0.8
+    ui:
+      - type: range
+        minimum: 0
+        maximum: 1
+        step: 0.01
+      - type: numberInput
+        precision: 2
+
+  - key: projectids
+    name: 限定项目
+    description: 只处理指定项目，为空时不限制项目
+    dataType: array
+    itemType: string
+    sourceType: manual
+    required: false
+    default: []
+    ui:
+      - type: multiSelect
+        provider: projectCatalog/v1
+
+  - key: route
+    name: 执行链路
+    description: 选择本次任务使用的处理链路
+    dataType: int
+    sourceType: manual
+    required: true
+    default: 1
+    ui:
+      - type: select
+        options:
+          - label: 链路一
+            value: 1
+          - label: 链路二
+            value: 2
+
+returns:
+  - key: result
+    name: 相似度校验结果
+    description: 是否通过相似度校验
+    dataType: bool
+    required: true
+
+  - key: sim_text
+    name: 最相似的文本
+    description: 匹配到的最相似文本
+    dataType: string
+    required: false
+
+  - key: value
+    name: 相似度分值
+    description: 匹配到的最高相似度分值
+    dataType: float
+    required: false
