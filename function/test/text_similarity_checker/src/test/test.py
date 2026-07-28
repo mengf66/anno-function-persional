@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 
-MAIN_PATH = Path(__file__).with_name("main.py")
+MAIN_PATH = Path(__file__).resolve().parents[1] / "main.py"
 
 
 def load_main_module():

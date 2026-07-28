@@ -1,0 +1,70 @@
+apiVersion: scripts.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: text_similarity_checker
+  owner: 欣翔
+  description: 将目标文本与已有文本列表进行相似度查重
+  examples:
+    - name: 检测相似文本
+      parameters:
+        text_field: Python makes data processing easy
+        existing_texts:
+          - Python makes data processing very easy
+          - The weather is sunny today
+        confidence: 0.8
+      returns:
+        result: false
+        sim_text: Python makes data processing very easy
+        value: 0.9296
+
+parameters:
+  - key: text_field
+    name: 目标文本
+    description: 需要进行相似度检测的文本
+    dataType: string
+    sourceType: feishu
+    required: true
+
+  - key: existing_texts
+    name: 已有文本
+    description: 用于与目标文本比较的文本列表
+    dataType: array
+    itemType: string
+    sourceType: manual
+    required: false
+    default: []
+
+  - key: confidence
+    name: 相似度阈值
+    description: 相似度高于该值时判定为重复
+    dataType: float
+    sourceType: manual
+    required: false
+    default: 0.8
+    ui:
+      - type: range
+        minimum: 0
+        maximum: 1
+        step: 0.01
+      - type: numberInput
+        precision: 2
+
+returns:
+  - key: result
+    name: 相似度校验结果
+    description: 未发现超过阈值的相似文本时为 true
+    dataType: bool
+    required: true
+
+  - key: sim_text
+    name: 最相似的文本
+    description: 匹配到的最相似文本，无候选文本时为空字符串
+    dataType: string
+    required: true
+
+  - key: value
+    name: 相似度分值
+    description: 匹配到的最高相似度分值
+    dataType: float
+    required: true
