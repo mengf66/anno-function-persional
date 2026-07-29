@@ -31,7 +31,7 @@ parameters:
     description: 用于与目标文本比较的文本列表
     dataType: array
     itemType: string
-    sourceType: manual
+    sourceType: feishu
     required: false
     default: []
 
