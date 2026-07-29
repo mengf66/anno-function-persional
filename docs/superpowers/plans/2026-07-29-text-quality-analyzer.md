@@ -137,7 +137,7 @@ if __name__ == "__main__":
 Run:
 
 ```bash
-python -m unittest function/text_quality_analyzer/test/test.py -v
+python3 -m unittest function/text_quality_analyzer/test/test.py -v
 ```
 
 Expected: FAIL because `function/text_quality_analyzer/src/main.py` does not exist.
@@ -203,7 +203,7 @@ if __name__ == "__main__":
 Run:
 
 ```bash
-python -m unittest function/text_quality_analyzer/test/test.py -v
+python3 -m unittest function/text_quality_analyzer/test/test.py -v
 ```
 
 Expected: 9 tests run and `OK`.
@@ -213,7 +213,7 @@ Expected: 9 tests run and `OK`.
 Run:
 
 ```bash
-python function/text_quality_analyzer/src/main.py '{"text_field":"Hello 世界\nAnno","max_length":20}'
+python3 function/text_quality_analyzer/src/main.py '{"text_field":"Hello 世界\nAnno","max_length":20}'
 ```
 
 Expected stdout:
@@ -225,7 +225,7 @@ Expected stdout:
 Run:
 
 ```bash
-printf '%s' '{"text_field":"12345","max_length":4}' | python function/text_quality_analyzer/src/main.py
+printf '%s' '{"text_field":"12345","max_length":4}' | python3 function/text_quality_analyzer/src/main.py
 ```
 
 Expected stdout:
@@ -333,7 +333,7 @@ returns:
 Run:
 
 ```bash
-python - <<'PY'
+python3 - <<'PY'
 from pathlib import Path
 
 metadata = Path("function/text_quality_analyzer/meta.yaml").read_text(encoding="utf-8")
@@ -363,10 +363,13 @@ Expected: `metadata contract OK`.
 Run:
 
 ```bash
-python -m unittest discover -s function -p 'test.py' -v
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
+  function/text_similarity_checker/test/test.py \
+  function/text_quality_analyzer/test/test.py \
+  -v
 ```
 
-Expected: all existing and new function tests pass.
+Expected: 12 existing and new function tests run and pass.
 
 - [ ] **Step 4: Check repository cleanliness and formatting errors**
 
