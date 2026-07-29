@@ -1,0 +1,43 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+metadata:
+  name: example
+  owner: ci
+  description: Valid Function fixture
+  examples:
+    - name: default
+      parameters:
+        text: hello
+        limit: 3
+      returns:
+        accepted: true
+        scores: [1, 2]
+parameters:
+  - key: text
+    name: Text
+    description: Input text
+    dataType: string
+    sourceType: feishu
+    required: true
+  - key: limit
+    name: Limit
+    description: Manual limit
+    dataType: int
+    sourceType: manual
+    required: false
+    default: 3
+    ui:
+      - type: numberInput
+        minimum: 0
+returns:
+  - key: accepted
+    name: Accepted
+    description: Acceptance result
+    dataType: bool
+    required: true
+  - key: scores
+    name: Scores
+    description: Integer scores
+    dataType: array
+    itemType: int
+    required: true
