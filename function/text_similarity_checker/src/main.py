@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Text similarity checker entry point."""
 
-import json
-import sys
 from difflib import SequenceMatcher
 
 
@@ -32,18 +30,21 @@ def check_text_similarity(
 
 def run(parameters: dict) -> dict:
     """Run the function from a parameter payload."""
-    return check_text_similarity(
+    return main(
         text_field=parameters["text_field"],
         existing_texts=parameters.get("existing_texts", []),
         confidence=float(parameters.get("confidence", 0.8)),
     )
 
 
-def main() -> int:
-    payload = json.loads(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read())
-    print(json.dumps(run(payload), ensure_ascii=False))
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+def main(
+    text_field: str,
+    existing_texts: list[str] | None = None,
+    confidence: float = 0.8,
+) -> dict:
+    """Run the Function with parameters supplied by anno-function-runner."""
+    return check_text_similarity(
+        text_field=text_field,
+        existing_texts=existing_texts or [],
+        confidence=confidence,
+    )
