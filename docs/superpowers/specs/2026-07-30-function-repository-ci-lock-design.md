@@ -19,8 +19,8 @@ The lock has three independent layers:
    and v* tag.
 2. A branch ruleset requires the strict check before changes enter the
    canonical release branch through a pull request.
-3. A tag ruleset restricts v* creation to validated release-branch commits and
-   forbids tag update and deletion.
+3. Separate tag rulesets restrict v* creation to the release App and forbid
+   tag update and deletion for every actor, including that App.
 
 All branches are validated. Feature branches remain pushable so their first
 commit can obtain a CI result; requiring a pre-existing result on every feature
@@ -110,8 +110,10 @@ The release-branch ruleset targets only the configured canonical branch,
 requires pull requests and the stable strict CI check, requires branches to be
 current, and blocks force pushes and deletion. It creates no broad bypass.
 
-The tag ruleset targets refs/tags/v*, blocks update and deletion, permits
-creation only by the dedicated release GitHub App, and preserves existing tags.
+The creation ruleset targets refs/tags/v*, blocks creation, and grants its only
+bypass to the dedicated release GitHub App. A separate immutable ruleset blocks
+update and deletion with no bypass actors. Splitting these rules is required
+because a GitHub ruleset bypass applies to every rule in that ruleset.
 
 Dry-run prints the exact desired/current diff. The installer aborts on missing
 admin scope, unsupported repository features, an unknown release branch, or
