@@ -33,6 +33,23 @@ class WorkflowTest(unittest.TestCase):
             if "uses" in step:
                 self.assertRegex(step["uses"], r"^[^@]+@[0-9a-f]{40}$")
 
+    def test_release_ci(self):
+        _, workflow = load_workflow("function-release.yml")
+        self.assertIn("workflow_dispatch", workflow["on"])
+        self.assertEqual(workflow["on"]["push"]["tags"], ["v*"])
+        self.assertEqual(workflow["permissions"], {"contents": "read"})
+        self.assertEqual(set(workflow["jobs"]), {"validate", "create", "audit"})
+        self.assertEqual(workflow["jobs"]["create"]["needs"], "validate")
+        uses = [
+            step["uses"]
+            for job in workflow["jobs"].values()
+            for step in job["steps"]
+            if "uses" in step
+        ]
+        self.assertTrue(uses)
+        for action in uses:
+            self.assertRegex(action, r"^[^@]+@[0-9a-f]{40}$")
+
 
 if __name__ == "__main__":
     unittest.main()
