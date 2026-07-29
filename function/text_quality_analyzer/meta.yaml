@@ -1,0 +1,70 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: text_quality_analyzer
+  owner: 欣翔
+  description: 统计文本质量指标，并按可选字符数上限进行校验
+  examples:
+    - name: 检查文本质量
+      parameters:
+        text_field: |-
+          Hello 世界
+          Anno
+        max_length: 20
+      returns:
+        result: true
+        char_count: 13
+        non_whitespace_count: 11
+        word_count: 3
+        line_count: 2
+
+parameters:
+  - key: text_field
+    name: 待检查文本
+    description: 需要统计质量指标的文本
+    dataType: string
+    sourceType: feishu
+    required: true
+
+  - key: max_length
+    name: 最大字符数
+    description: 允许的最大字符数，设为 0 时不限制
+    dataType: int
+    sourceType: manual
+    required: false
+    default: 0
+    ui:
+      - type: numberInput
+        minimum: 0
+
+returns:
+  - key: result
+    name: 长度校验结果
+    description: 未启用字符数限制或文本未超过上限时为 true
+    dataType: bool
+    required: true
+
+  - key: char_count
+    name: 字符数
+    description: 文本包含的 Unicode 字符总数
+    dataType: int
+    required: true
+
+  - key: non_whitespace_count
+    name: 非空白字符数
+    description: 文本中不属于空白符的字符数
+    dataType: int
+    required: true
+
+  - key: word_count
+    name: 词段数
+    description: 文本中连续 Unicode 字母或数字片段的数量
+    dataType: int
+    required: true
+
+  - key: line_count
+    name: 行数
+    description: 文本逻辑行数量，空文本为 0
+    dataType: int
+    required: true

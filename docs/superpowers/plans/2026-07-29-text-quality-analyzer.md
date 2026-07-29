@@ -295,7 +295,6 @@ parameters:
     ui:
       - type: numberInput
         minimum: 0
-        precision: 0
 
 returns:
   - key: result
