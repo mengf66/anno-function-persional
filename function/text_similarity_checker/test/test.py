@@ -16,6 +16,31 @@ def load_main_module():
 
 
 class TextSimilarityCheckerTest(unittest.TestCase):
+    def test_main_accepts_function_parameters(self):
+        checker = load_main_module()
+
+        result = checker.main(
+            text_field="Python makes data processing easy",
+            existing_texts=["Python makes data processing very easy"],
+            confidence=0.8,
+        )
+
+        self.assertEqual(result["sim_text"], "Python makes data processing very easy")
+        self.assertFalse(result["result"])
+
+    def test_run_delegates_to_main(self):
+        checker = load_main_module()
+
+        result = checker.run(
+            {
+                "text_field": "abcd",
+                "existing_texts": ["abce"],
+                "confidence": 0.75,
+            }
+        )
+
+        self.assertEqual(result, checker.main("abcd", ["abce"], 0.75))
+
     def test_rejects_highly_similar_text(self):
         checker = load_main_module()
 
