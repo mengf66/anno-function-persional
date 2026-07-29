@@ -397,12 +397,13 @@ Expected: import failure because configure_repository_rules does not exist.
 
 - [ ] **Step 3: Implement pure reconciliation and GitHub adapter**
 
-Manage only rulesets named anno-function-release-branch and
-anno-function-version-tags. The branch ruleset requires PRs, strict status
-checks, current branches, and blocks deletion/force push. The tag ruleset
-targets refs/tags/v*, blocks update/deletion, and gives create bypass only to
-the supplied Integration actor. Fetch full current ruleset details before
-diffing. Abort on ambiguity or partial reads.
+Manage only rulesets named anno-function-release-branch,
+anno-function-version-creation, and anno-function-version-immutable. The branch
+ruleset requires PRs, strict status checks, current branches, and blocks
+deletion/force push. The creation ruleset gives its only bypass to the supplied
+Integration actor. The immutable ruleset blocks tag update/deletion with no
+bypass. Fetch full current ruleset details before diffing. Abort on ambiguity
+or partial reads.
 
 - [ ] **Step 4: Verify GREEN and dry-run**
 
@@ -416,8 +417,8 @@ python3 scripts/configure_repository_rules.py \
   --app-integration-id 1
 ~~~
 
-Expected: tests pass; dry-run prints two proposed rulesets and performs no POST,
-PUT, or DELETE.
+Expected: tests pass; dry-run prints three proposed rulesets and performs no
+POST, PUT, or DELETE.
 
 - [ ] **Step 5: Commit**
 
@@ -455,7 +456,7 @@ intentional files are present.
 
 Run configure_repository_rules.py without --apply using the real repository,
 chosen release branch, and dedicated GitHub App integration ID. Save the exact
-read-only diff in the task report. Expected: only the two named managed
+read-only diff in the task report. Expected: only the three named managed
 rulesets are created or updated.
 
 - [ ] **Step 3: Push and verify branch CI before protection**
@@ -472,7 +473,7 @@ confirms this exact activation.
 
 - [ ] **Step 5: Apply and read back rulesets**
 
-Run the reconciler with --apply, then fetch both rulesets again and compare
+Run the reconciler with --apply, then fetch all three rulesets again and compare
 their normalized bodies to desired_rulesets. Expected: no diff.
 
 - [ ] **Step 6: Verify server-side enforcement**
