@@ -64,6 +64,7 @@ jobs:
           app-id: ${{ secrets.RELEASE_APP_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
+          repositories: anno-function-persional
       - name: Create one annotated immutable tag
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
