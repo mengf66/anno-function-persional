@@ -16,6 +16,14 @@ def load_main_module():
 
 
 class TextQualityAnalyzerTest(unittest.TestCase):
+    def test_main_accepts_function_parameters(self):
+        analyzer = load_main_module()
+
+        result = analyzer.main(text_field="Hello world", max_length=20)
+
+        self.assertEqual(result["char_count"], 11)
+        self.assertTrue(result["result"])
+
     def test_reports_english_text_metrics(self):
         analyzer = load_main_module()
 
