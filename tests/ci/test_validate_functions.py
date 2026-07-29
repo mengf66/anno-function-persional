@@ -14,7 +14,11 @@ class RepositoryValidatorTest(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         root = Path(temporary.name)
         target = root / "function" / "example"
-        shutil.copytree(FIXTURE, target)
+        shutil.copytree(
+            FIXTURE,
+            target,
+            ignore=shutil.ignore_patterns("__pycache__", "*.py[cod]"),
+        )
         return temporary, root, target
 
     def test_valid_repository_passes(self):
@@ -64,7 +68,7 @@ class RepositoryValidatorTest(unittest.TestCase):
         temporary, root, function = self.make_repo()
         with temporary:
             (function / ".env").write_text("", encoding="utf-8")
-            (function / "src" / "__pycache__").mkdir()
+            (function / "src" / "__pycache__").mkdir(exist_ok=True)
             findings = validate_repository(root)
             self.assertEqual(findings, sorted(findings))
 

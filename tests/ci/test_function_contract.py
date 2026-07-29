@@ -77,6 +77,62 @@ class FunctionContractTest(unittest.TestCase):
         with self.assertRaisesRegex(ContractError, "example.return.missing"):
             parse_definition(raw)
 
+    def test_rejects_conflicting_rules_across_ui_controls(self):
+        raw = valid_yaml().replace(
+            "      - type: numberInput\n        minimum: 0",
+            "      - type: numberInput\n        minimum: 0\n"
+            "      - type: range\n        minimum: 1\n        maximum: 10\n        step: 1",
+        )
+        with self.assertRaisesRegex(ContractError, "ui.rule.conflict"):
+            parse_definition(raw)
+
+    def test_rejects_default_outside_numeric_bounds(self):
+        raw = valid_yaml().replace("        minimum: 0", "        minimum: 4")
+        with self.assertRaisesRegex(ContractError, "parameter.default.rule"):
+            parse_definition(raw)
+
+    def test_rejects_default_not_aligned_to_step(self):
+        raw = valid_yaml().replace(
+            "        minimum: 0",
+            "        minimum: 0\n        step: 2",
+        )
+        with self.assertRaisesRegex(ContractError, "parameter.default.rule"):
+            parse_definition(raw)
+
+    def test_rejects_precision_on_integer_field(self):
+        raw = valid_yaml().replace(
+            "        minimum: 0",
+            "        minimum: 0\n        precision: 2",
+        )
+        with self.assertRaisesRegex(ContractError, "ui.precision.invalid"):
+            parse_definition(raw)
+
+    def test_rejects_select_for_array_and_multiselect_for_scalar(self):
+        select_array = valid_yaml().replace(
+            "      - type: numberInput\n        minimum: 0",
+            "      - type: select\n        provider: catalog/v1",
+        ).replace("    dataType: int", "    dataType: array\n    itemType: int", 1)
+        with self.assertRaisesRegex(ContractError, "ui.select.invalid"):
+            parse_definition(select_array)
+
+        multi_scalar = valid_yaml().replace(
+            "      - type: numberInput\n        minimum: 0",
+            "      - type: multiSelect\n        provider: catalog/v1",
+        )
+        with self.assertRaisesRegex(ContractError, "ui.multi_select.invalid"):
+            parse_definition(multi_scalar)
+
+    def test_rejects_duplicate_or_invalid_static_options(self):
+        raw = valid_yaml().replace(
+            "      - type: numberInput\n        minimum: 0",
+            "      - type: select\n"
+            "        options:\n"
+            "          - {label: One, value: 1}\n"
+            "          - {label: Again, value: 1}",
+        )
+        with self.assertRaisesRegex(ContractError, "ui.option.duplicate"):
+            parse_definition(raw)
+
 
 if __name__ == "__main__":
     unittest.main()

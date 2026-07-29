@@ -40,6 +40,12 @@ class WorkflowTest(unittest.TestCase):
         self.assertEqual(workflow["permissions"], {"contents": "read"})
         self.assertEqual(set(workflow["jobs"]), {"validate", "create", "audit"})
         self.assertEqual(workflow["jobs"]["create"]["needs"], "validate")
+        token_step = next(
+            step
+            for step in workflow["jobs"]["create"]["steps"]
+            if step.get("id") == "app-token"
+        )
+        self.assertEqual(token_step["with"]["repositories"], "anno-function-persional")
         uses = [
             step["uses"]
             for job in workflow["jobs"].values()
