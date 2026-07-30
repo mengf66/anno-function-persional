@@ -1,0 +1,62 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: keyword_occurrence_checker
+  owner: 欣翔
+  description: 检查文本中是否包含指定关键词，并统计非重叠出现次数
+  examples:
+    - name: 忽略大小写检查关键词
+      parameters:
+        text_field: Anno makes annotation easier. ANNO is reusable.
+        keyword: anno
+        case_sensitive: false
+      returns:
+        result: true
+        match_count: 2
+
+parameters:
+  - key: text_field
+    name: 待检查文本
+    description: 需要搜索关键词的文本
+    dataType: string
+    sourceType: feishu
+    required: true
+
+  - key: keyword
+    name: 关键词
+    description: 需要在文本中查找的非空关键词
+    dataType: string
+    sourceType: manual
+    required: true
+    ui:
+      - type: textInput
+        minLength: 1
+
+  - key: case_sensitive
+    name: 区分大小写
+    description: 是否按原始大小写匹配关键词
+    dataType: bool
+    sourceType: manual
+    required: false
+    default: false
+    ui:
+      - type: select
+        options:
+          - label: 不区分大小写
+            value: false
+          - label: 区分大小写
+            value: true
+
+returns:
+  - key: result
+    name: 是否匹配
+    description: 文本中至少出现一次关键词时为 true
+    dataType: bool
+    required: true
+
+  - key: match_count
+    name: 匹配次数
+    description: 关键词在文本中非重叠出现的次数
+    dataType: int
+    required: true
