@@ -1,0 +1,54 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: line_deduplicator
+  owner: 欣翔
+  description: 删除文本中的重复行，并保留每一行首次出现的顺序
+  examples:
+    - name: 删除重复行
+      parameters:
+        text_field: |-
+          apple
+          banana
+          apple
+      returns:
+        result: |-
+          apple
+          banana
+        original_line_count: 3
+        unique_line_count: 2
+        removed_count: 1
+
+parameters:
+  - key: text_field
+    name: 待去重文本
+    description: 需要按行去重的文本
+    dataType: string
+    sourceType: feishu
+    required: true
+
+returns:
+  - key: result
+    name: 去重结果
+    description: 按首次出现顺序保留的不重复文本行
+    dataType: string
+    required: true
+
+  - key: original_line_count
+    name: 原始行数
+    description: 输入文本的行数
+    dataType: int
+    required: true
+
+  - key: unique_line_count
+    name: 去重后行数
+    description: 去重后保留的行数
+    dataType: int
+    required: true
+
+  - key: removed_count
+    name: 删除行数
+    description: 被删除的重复行数量
+    dataType: int
+    required: true
