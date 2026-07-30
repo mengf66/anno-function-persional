@@ -11,6 +11,7 @@ class FakeClient:
         self.tags = {"v1": "1" * 40, "v7": "7" * 40}
         self.ancestor = True
         self.check = True
+        self.requested_check = None
         self.created = []
 
     def list_tags(self):
@@ -20,6 +21,7 @@ class FakeClient:
         return self.ancestor
 
     def has_successful_check(self, sha, name):
+        self.requested_check = name
         return self.check
 
     def create_annotated_tag(self, version, sha):
@@ -31,6 +33,7 @@ class ReleaseTagTest(unittest.TestCase):
         client = FakeClient()
         decision = validate_release("v8", SHA, "release", client)
         self.assertEqual(decision.version, "v8")
+        self.assertEqual(client.requested_check, "strict")
         self.assertEqual(client.created, [])
 
     def test_rejects_invalid_or_non_increasing_version(self):

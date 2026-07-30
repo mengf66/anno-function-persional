@@ -12,6 +12,7 @@ from urllib.request import Request, urlopen
 
 
 CHECK_NAME = "Function CI / strict"
+CHECK_RUN_NAME = "strict"
 
 
 class ReleaseError(ValueError):
@@ -54,7 +55,7 @@ def validate_release(
         raise ReleaseError("branch.invalid", "release branch is required")
     if not client.is_reachable(release_branch, commit_sha):
         raise ReleaseError("commit.off_branch", release_branch)
-    if not client.has_successful_check(commit_sha, CHECK_NAME):
+    if not client.has_successful_check(commit_sha, CHECK_RUN_NAME):
         raise ReleaseError("check.missing", f"{CHECK_NAME} is not successful for {commit_sha}")
     decision = ReleaseDecision(version, commit_sha, release_branch)
     if create:
