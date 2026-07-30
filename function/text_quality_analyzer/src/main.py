@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Text quality analyzer entry point."""
 
-import json
 import re
-import sys
 
 
 LINE_BOUNDARIES = (
@@ -46,17 +44,12 @@ def analyze_text(text_field: str, max_length: int = 0) -> dict:
 
 def run(parameters: dict) -> dict:
     """Run the function from a parameter payload."""
-    return analyze_text(
+    return main(
         text_field=parameters["text_field"],
         max_length=int(parameters.get("max_length", 0)),
     )
 
 
-def main() -> int:
-    payload = json.loads(sys.argv[1] if len(sys.argv) > 1 else sys.stdin.read())
-    print(json.dumps(run(payload), ensure_ascii=False))
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+def main(text_field: str, max_length: int = 0) -> dict:
+    """Run the Function with parameters supplied by anno-function-runner."""
+    return analyze_text(text_field=text_field, max_length=max_length)

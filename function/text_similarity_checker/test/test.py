@@ -25,8 +25,21 @@ class TextSimilarityCheckerTest(unittest.TestCase):
             confidence=0.8,
         )
 
-        self.assertFalse(result["result"])
         self.assertEqual(result["sim_text"], "Python makes data processing very easy")
+        self.assertFalse(result["result"])
+
+    def test_run_delegates_to_main(self):
+        checker = load_main_module()
+
+        result = checker.run(
+            {
+                "text_field": "abcd",
+                "existing_texts": ["abce"],
+                "confidence": 0.75,
+            }
+        )
+
+        self.assertEqual(result, checker.main("abcd", ["abce"], 0.75))
 
     def test_rejects_highly_similar_text(self):
         checker = load_main_module()
