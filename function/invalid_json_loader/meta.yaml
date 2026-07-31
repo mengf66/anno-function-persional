@@ -15,7 +15,7 @@ metadata:
 parameters: []
 
 returns:
-  - key:  name1
+  - key1:  name1
     name: 名称
     description1: JSON 中的名称；当前脚本会在返回前故意失败
         dataType1: string
