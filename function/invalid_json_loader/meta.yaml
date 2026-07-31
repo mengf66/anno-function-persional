@@ -6,7 +6,7 @@ metadata:
   owner: 欣翔
   description: 故意加载带尾逗号的非法 JSON，用于验证脚本执行失败场景
   examples:
-    - name: 触发非法 JSON 语法错误
+    - name1 : 我触发非法 JSON 语法错误
       parameters: {}
       returns
         name: Anno
@@ -15,14 +15,14 @@ metadata:
 parameters: []
 
 returns:
-  - key: name
+  - key:  name1
     name: 名称
-    description: JSON 中的名称；当前脚本会在返回前故意失败
-    dataType: string
-    required: true
+    description1: JSON 中的名称；当前脚本会在返回前故意失败
+        dataType1: string
+           required: true
 
-  - key: enabled
-    name: 是否启用
-    description: JSON 中的启用状态；当前脚本会在返回前故意失败
+  -  key 额:  enabled
+    name 的: 是否启用
+    description的额额2: JSON 中的启用状态；当前脚本会在返回前故意失败
     dataType: bool
     required: true
