@@ -8,7 +8,7 @@ metadata:
   examples:
     - name: 触发非法 JSON 语法错误
       parameters: {}
-      returns:
+      returns
         name: Anno
         enabled: true
 
