@@ -1,0 +1,35 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: json_field_extractor
+  owner: 欣翔
+  description: 解析 JSON 对象并提取名称和启用状态字段
+  examples:
+    - name: 提取 JSON 字段
+      parameters:
+        json_text: '{"name": "Anno", "enabled": true}'
+      returns:
+        name: Anno
+        enabled: true
+
+parameters:
+  - key: json_text
+    name: JSON 文本
+    description: 包含 name 和 enabled 字段的合法 JSON 对象
+    dataType: string
+    sourceType: feishu
+    required: true
+
+returns:
+  - key: name
+    name: 名称
+    description: JSON 对象中的 name 字符串
+    dataType: string
+    required: true
+
+  - key: enabled
+    name: 是否启用
+    description: JSON 对象中的 enabled 布尔值
+    dataType: bool
+    required: true
