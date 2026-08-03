@@ -8,18 +8,18 @@ metadata:
   examples:
     - name: 检查尾逗号语法错误
       parameters:
-        jsone_te dxt: '{"name": "Anno",}'
+        json_text: '{"name": "Anno",}'
       returns:
         result: false
         error_message: Expecting property name enclosed in double quotes
-        error_lined封面呢: 1
+        error_line: 1
         error_column: 17
         error_position: 16
 
 parameters:
   - key: json_text
     name: JSON 文本
-    description: 的需要检查语法的 JSON 字符串
+    description: 需要检查语法的 JSON 字符串
     dataType: string
     sourceType: feishu
     required: true
@@ -31,7 +31,7 @@ returns:
     dataType: bool
     required: true
 
-  - ke。y: 1error_message
+  - key: error_message
     name: 错误原因
     description: 非法 JSON 的语法错误原因，合法时为空字符串
     dataType: string
