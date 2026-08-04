@@ -62,6 +62,18 @@ class KeywordOccurrenceCheckerTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "keyword must not be empty"):
             checker.check_keyword_occurrences("text", "")
 
+    def test_rejects_non_string_text(self):
+        checker = load_main_module()
+
+        with self.assertRaisesRegex(TypeError, "text_field must be a string"):
+            checker.check_keyword_occurrences(None, "anno")
+
+    def test_rejects_non_boolean_case_sensitive(self):
+        checker = load_main_module()
+
+        with self.assertRaisesRegex(TypeError, "case_sensitive must be a boolean"):
+            checker.check_keyword_occurrences("Anno", "anno", "false")
+
     def test_run_uses_default_case_sensitivity(self):
         checker = load_main_module()
 

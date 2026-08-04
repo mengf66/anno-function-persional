@@ -4,6 +4,9 @@
 
 def deduplicate_lines(text_field: str) -> dict:
     """Return the text with duplicate lines removed in encounter order."""
+    if not isinstance(text_field, str):
+        raise TypeError("text_field must be a string")
+
     lines = text_field.splitlines()
     unique_lines: list[str] = []
     seen: set[str] = set()

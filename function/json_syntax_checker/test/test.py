@@ -39,6 +39,13 @@ class JsonSyntaxCheckerTest(unittest.TestCase):
 
         self.assertTrue(result["result"])
 
+    def test_accepts_json_with_utf8_bom(self):
+        checker = load_main_module()
+
+        result = checker.check_json_syntax('\ufeff{"name": "Anno"}')
+
+        self.assertTrue(result["result"])
+
     def test_reports_trailing_comma(self):
         checker = load_main_module()
 
@@ -86,6 +93,12 @@ class JsonSyntaxCheckerTest(unittest.TestCase):
         self.assertFalse(result["result"])
         self.assertEqual(result["error_line"], 1)
         self.assertEqual(result["error_column"], 1)
+
+    def test_rejects_non_string_input(self):
+        checker = load_main_module()
+
+        with self.assertRaisesRegex(TypeError, "json_text must be a string"):
+            checker.check_json_syntax({"name": "Anno"})
 
     def test_run_passes_json_text_to_main(self):
         checker = load_main_module()

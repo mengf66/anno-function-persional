@@ -48,6 +48,12 @@ class LineDeduplicatorTest(unittest.TestCase):
         self.assertEqual(result["result"], "first\n\nsecond")
         self.assertEqual(result["removed_count"], 1)
 
+    def test_rejects_non_string_input(self):
+        deduplicator = load_main_module()
+
+        with self.assertRaisesRegex(TypeError, "text_field must be a string"):
+            deduplicator.deduplicate_lines(["one", "two"])
+
     def test_run_delegates_to_main(self):
         deduplicator = load_main_module()
 
