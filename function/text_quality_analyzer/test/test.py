@@ -83,6 +83,18 @@ class TextQualityAnalyzerTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "max_length must be zero or greater"):
             analyzer.analyze_text("text", max_length=-1)
 
+    def test_rejects_non_string_text(self):
+        analyzer = load_main_module()
+
+        with self.assertRaisesRegex(TypeError, "text_field must be a string"):
+            analyzer.analyze_text(None)
+
+    def test_rejects_non_integer_length_limit(self):
+        analyzer = load_main_module()
+
+        with self.assertRaisesRegex(TypeError, "max_length must be an integer"):
+            analyzer.analyze_text("text", max_length=True)
+
     def test_run_uses_default_length_limit(self):
         analyzer = load_main_module()
 

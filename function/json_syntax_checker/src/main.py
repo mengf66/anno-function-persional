@@ -6,8 +6,13 @@ import json
 
 def check_json_syntax(json_text: str) -> dict:
     """Return whether JSON text is valid and locate any syntax error."""
+    if not isinstance(json_text, str):
+        raise TypeError("json_text must be a string")
+
+    # Feishu cells populated from imported UTF-8 files may retain a leading BOM.
+    normalized_text = json_text.removeprefix("\ufeff")
     try:
-        json.loads(json_text)
+        json.loads(normalized_text)
     except json.JSONDecodeError as exc:
         return {
             "result": False,

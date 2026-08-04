@@ -27,6 +27,10 @@ def count_lines(text: str) -> int:
 
 def analyze_text(text_field: str, max_length: int = 0) -> dict:
     """Measure text and apply an optional character limit."""
+    if not isinstance(text_field, str):
+        raise TypeError("text_field must be a string")
+    if isinstance(max_length, bool) or not isinstance(max_length, int):
+        raise TypeError("max_length must be an integer")
     if max_length < 0:
         raise ValueError("max_length must be zero or greater")
 

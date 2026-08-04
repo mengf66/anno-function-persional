@@ -8,6 +8,12 @@ def check_keyword_occurrences(
     case_sensitive: bool = False,
 ) -> dict:
     """Count non-overlapping keyword occurrences in the supplied text."""
+    if not isinstance(text_field, str):
+        raise TypeError("text_field must be a string")
+    if not isinstance(keyword, str):
+        raise TypeError("keyword must be a string")
+    if not isinstance(case_sensitive, bool):
+        raise TypeError("case_sensitive must be a boolean")
     if not keyword:
         raise ValueError("keyword must not be empty")
 
