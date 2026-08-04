@@ -9,7 +9,7 @@ Add a small Anno Function that measures text quality signals commonly needed whe
 Create `function/text_quality_analyzer/` with exactly these runtime artifacts:
 
 - `meta.yaml` declares the function, Feishu/manual inputs, outputs, and one representative example.
-- `src/main.py` contains the analysis logic, the `run(parameters)` adapter, and the JSON command-line entry point.
+- `src/main.py` contains the analysis logic, the `run(parameters)` adapter, and the callable `main(**parameters)` entry point required by `anno-function-runner`.
 - `test/test.py` contains standard-library `unittest` coverage.
 
 No third-party dependencies, network calls, file writes, shared helpers, or changes to the existing function are included.
@@ -33,15 +33,18 @@ The metadata uses `apiVersion: functions.anno.meetchances.com/v1alpha1`, `kind: 
 
 ## Runtime Flow
 
-`main()` reads one JSON object from the first command-line argument, or from standard input when no argument is supplied. It passes the decoded object to `run(parameters)`. `run` extracts the declared inputs and calls `analyze_text`. The result is serialized as one JSON object on standard output with `ensure_ascii=False` so Chinese text remains readable.
+`anno-function-runner` imports `src/main.py` and calls `main(text_field=..., max_length=...)` directly. `main` delegates to `analyze_text` and returns the declared result mapping. It does not read process arguments, consume standard input, or print JSON.
 
-`analyze_text` validates `max_length`, calculates each metric, and returns the declared result mapping. The entry point does not catch malformed input or validation errors; it exits unsuccessfully with the original error rather than producing a plausible but incorrect result.
+`run(parameters)` remains a mapping adapter for compatibility with direct payload-based callers. It extracts the declared inputs and delegates to `main`, matching the structure established by `text_similarity_checker` in tag `v5`.
+
+`analyze_text` validates `max_length`, calculates each metric, and returns the declared result mapping. Neither entry point catches validation or type errors, so invalid invocations fail explicitly rather than producing a plausible but incorrect result.
 
 ## Error Handling
 
-- Missing `text_field` raises `KeyError`, matching the existing function's required-parameter behavior.
+- Calling `run` without `text_field` raises `KeyError`, matching the existing function's required-parameter behavior.
+- Calling `main` without `text_field` raises `TypeError` through its required Python parameter.
 - A negative `max_length` raises `ValueError` with a clear message.
-- JSON decoding and incompatible input types are not silently coerced, except `max_length` follows the existing adapter pattern and is converted with `int(...)`.
+- Incompatible input types are not silently coerced by `main`; `run` retains the existing adapter behavior and converts `max_length` with `int(...)`.
 
 ## Verification
 
@@ -55,6 +58,7 @@ Unit tests cover:
 - equality at the maximum length boundary;
 - text over the maximum length;
 - rejection of a negative maximum length;
+- direct runner-style invocation through `main(text_field=..., max_length=...)`;
 - the `run(parameters)` adapter defaults.
 
-The script will also be exercised through both supported JSON entry paths to verify that stdout is valid JSON and matches the metadata contract.
+The complete Function tests and the anno-server metadata parser must pass. After verification and review, annotated tag `v7` will point to the corrected runner-compatible commit; existing tag `v6` remains unchanged.
