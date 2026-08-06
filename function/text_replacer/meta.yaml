@@ -1,0 +1,68 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: text_replacer
+  owner: 欣翔
+  description: 替换文本中的指定内容，并返回实际替换次数
+  examples:
+    - name: 限制替换次数
+      parameters:
+        text_field: Anno makes annotation easier. Anno is reusable.
+        old_text: Anno
+        new_text: ANNO
+        max_replacements: 1
+      returns:
+        result: ANNO makes annotation easier. Anno is reusable.
+        replacement_count: 1
+
+parameters:
+  - key: text_field
+    name: 待处理文本
+    description: 需要执行替换的原始文本
+    dataType: string
+    sourceType: feishu
+    required: true
+
+  - key: old_text
+    name: 查找文本
+    description: 需要被替换的非空文本
+    dataType: string
+    sourceType: manual
+    required: true
+    ui:
+      - type: textInput
+        minLength: 1
+
+  - key: new_text
+    name: 替换文本
+    description: 用于替换匹配内容的文本，可为空字符串
+    dataType: string
+    sourceType: manual
+    required: true
+    ui:
+      - type: textInput
+
+  - key: max_replacements
+    name: 最大替换次数
+    description: 最大替换次数，设为 0 时替换全部匹配项
+    dataType: int
+    sourceType: manual
+    required: false
+    default: 0
+    ui:
+      - type: numberInput
+        minimum: 0
+
+returns:
+  - key: result
+    name: 替换结果
+    description: 完成替换后的文本
+    dataType: string
+    required: true
+
+  - key: replacement_count
+    name: 替换次数
+    description: 实际完成的非重叠替换次数
+    dataType: int
+    required: true
