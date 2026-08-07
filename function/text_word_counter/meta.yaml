@@ -1,0 +1,42 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: text_word_counter
+  owner: fengmeng
+  description: 对输入文本进行字数统计，支持中文字符数、英文单词数和总字符数
+  examples:
+    - name: 中英文混合文本计数
+      parameters:
+        text: Hello 你好世界
+      returns:
+        chinese_chars: 4
+        english_words: 1
+        total_chars: 9
+
+parameters:
+  - key: text
+    name: 输入文本
+    description: 需要进行字数统计的文本内容
+    dataType: string
+    sourceType: feishu
+    required: true
+
+returns:
+  - key: chinese_chars
+    name: 中文字符数
+    description: 文本中的中文字符数量
+    dataType: int
+    required: true
+
+  - key: english_words
+    name: 英文单词数
+    description: 文本中的英文单词数量（以空格分隔）
+    dataType: int
+    required: true
+
+  - key: total_chars
+    name: 总字符数
+    description: 文本的总字符数（不含空白符）
+    dataType: int
+    required: true
