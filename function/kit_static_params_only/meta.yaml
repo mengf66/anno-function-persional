@@ -1,0 +1,46 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: kit_static_params_only
+  owner: anno-kit-test
+  description: 核心链路测试-仅静态 parameters、无 input_bindings（验证无懒回源也能跑通回调）
+  examples:
+    - name: static
+      parameters:
+        prefix: fn
+        value: 42
+      returns:
+        message: "fn:42"
+        value: 42
+
+parameters:
+  - key: prefix
+    name: 前缀
+    description: 静态前缀
+    dataType: string
+    sourceType: manual
+    required: true
+    ui:
+      - type: textInput
+  - key: value
+    name: 数值
+    description: 静态整数
+    dataType: int
+    sourceType: manual
+    required: true
+    ui:
+      - type: numberInput
+        minimum: 0
+
+returns:
+  - key: message
+    name: 消息
+    description: prefix:value
+    dataType: string
+    required: true
+  - key: value
+    name: 数值回传
+    description: 原样回传 value
+    dataType: int
+    required: true
