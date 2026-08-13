@@ -1,0 +1,56 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: kit_attachment_inspect
+  owner: anno-kit-test
+  description: >-
+    核心链路测试-附件相关：绑定 Attachment 字段懒回源后的可读摘要（当前 runtime 对 Attachment
+    不做本地下载；本函数把 list/map 结构序列化为摘要字符串，便于回写断言）。
+    另支持静态 label parameters。
+  examples:
+    - name: inspect-empty
+      parameters:
+        attachment_raw: ""
+        label: smoke
+      returns:
+        count: 0
+        names: ""
+        status: "ok:smoke:0"
+
+parameters:
+  - key: attachment_raw
+    name: 附件原始值
+    description: >-
+      绑定 Attachment 字段时，anno-function 会把非 Text 值原样传入。
+      为兼容类型校验，策略侧也可绑定已物化的附件摘要 Text 字段。
+    dataType: string
+    sourceType: feishu
+    required: false
+
+  - key: label
+    name: 标签
+    description: 静态 parameters 注入
+    dataType: string
+    sourceType: manual
+    required: false
+    default: smoke
+    ui:
+      - type: textInput
+
+returns:
+  - key: count
+    name: 附件数
+    description: 解析到的附件条数
+    dataType: int
+    required: true
+  - key: names
+    name: 附件名
+    description: 附件 name 摘要
+    dataType: string
+    required: true
+  - key: status
+    name: 状态
+    description: ok:label:count
+    dataType: string
+    required: true

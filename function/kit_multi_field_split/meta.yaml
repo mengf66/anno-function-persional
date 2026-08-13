@@ -1,0 +1,47 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: kit_multi_field_split
+  owner: anno-kit-test
+  description: 核心链路测试-多字段输入绑定与多输出回写
+  examples:
+    - name: split
+      parameters:
+        left: hello
+        right: world
+      returns:
+        joined: "hello|world"
+        left_upper: HELLO
+        right_len: 5
+
+parameters:
+  - key: left
+    name: 左文本
+    description: 第一个绑定字段
+    dataType: string
+    sourceType: feishu
+    required: true
+  - key: right
+    name: 右文本
+    description: 第二个绑定字段
+    dataType: string
+    sourceType: feishu
+    required: true
+
+returns:
+  - key: joined
+    name: 拼接
+    description: left|right
+    dataType: string
+    required: true
+  - key: left_upper
+    name: 左大写
+    description: left upper
+    dataType: string
+    required: true
+  - key: right_len
+    name: 右长度
+    description: len(right)
+    dataType: int
+    required: true

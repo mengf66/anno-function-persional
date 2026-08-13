@@ -1,0 +1,60 @@
+apiVersion: functions.anno.meetchances.com/v1alpha1
+kind: Function
+
+metadata:
+  name: kit_field_map_echo
+  owner: anno-kit-test
+  description: 核心链路测试-字段懒映射/多输出/空值放行（anno-kit function 冒烟）
+  examples:
+    - name: map-and-count
+      parameters:
+        text_field: |-
+          hello
+          hello
+          world
+        empty_field: ""
+      returns:
+        result: "hello\nworld"
+        line_count: 3
+        empty_is_none: true
+        status: ok
+
+parameters:
+  - key: text_field
+    name: 主文本
+    description: 经 input_bindings 懒回源的文本字段
+    dataType: string
+    sourceType: feishu
+    required: true
+
+  - key: empty_field
+    name: 可空文本
+    description: 允许空值的绑定字段，用于验证 empty-bound 不 fail-fast
+    dataType: string
+    sourceType: feishu
+    required: false
+
+returns:
+  - key: result
+    name: 去重文本
+    description: 按行去重后的文本
+    dataType: string
+    required: true
+
+  - key: line_count
+    name: 原始行数
+    description: 输入文本行数
+    dataType: int
+    required: true
+
+  - key: empty_is_none
+    name: 空值标记
+    description: empty_field 是否为空
+    dataType: bool
+    required: true
+
+  - key: status
+    name: 状态
+    description: 固定 ok，便于回写断言
+    dataType: string
+    required: true
